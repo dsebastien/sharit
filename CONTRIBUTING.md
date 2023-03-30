@@ -114,3 +114,9 @@ the `make release` will ask you the version number to create the tag, ex: type `
 
 ## API keys
 Check out the main readme file to see how to get the API keys you need
+
+## Formatting the code
+Run `black sharit`
+
+## Linting the code
+Run `make lint`
