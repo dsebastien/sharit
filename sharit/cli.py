@@ -10,6 +10,7 @@ import urllib.request as urllib
 import slack_sdk as slack
 from slack_sdk.errors import SlackApiError
 import tweepy
+from bs4 import BeautifulSoup
 
 """CLI interface
 """
@@ -100,14 +101,16 @@ def main():  # pragma: no cover
     SLACK_CHANNEL = args.slack_channel
     SUB_REDDIT_NAME = args.sub_reddit
 
-    #post_to_reddit(SUB_REDDIT_NAME, url_to_share, REDDIT_CLIENT_ID, REDDIT_SECRET, REDDIT_REFRESH_TOKEN)
-    #post_to_slack(SLACK_CHANNEL, url_to_share, SLACK_BOT_TOKEN)
+    response = requests.get(url_to_share)
+    soup = BeautifulSoup(response.content, 'html.parser')
+    page_title = soup.title.string.strip()
+
     post_to_reddit(SUB_REDDIT_NAME, url_to_share, page_title, REDDIT_CLIENT_ID, REDDIT_SECRET, REDDIT_REFRESH_TOKEN)
     post_to_slack(SLACK_CHANNEL, url_to_share, SLACK_BOT_TOKEN)
     post_to_twitter(url_to_share, TWITTER_API_KEY, TWITTER_API_SECRET_KEY, TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_TOKEN_SECRET)
 
 # Function to publish the URL on Reddit
-def post_to_reddit(sub_reddit, url, reddit_client_id, reddit_secret, reddit_refresh_token):
+def post_to_reddit(sub_reddit, url, title, reddit_client_id, reddit_secret, reddit_refresh_token):
   print("Sharing [{url}] on sub-reddit [{sub_reddit}]".format(url=url,sub_reddit=sub_reddit, end=''))
 
   reddit = praw.Reddit(
@@ -118,9 +121,6 @@ def post_to_reddit(sub_reddit, url, reddit_client_id, reddit_secret, reddit_refr
   )
 
   subreddit = reddit.subreddit(sub_reddit)
-  page = urllib.urlopen(url)
-  page_contents = lxml.html.parse(page)
-  title = page_contents.find(".//title").text
 
   try:
     submission_id = subreddit.submit(title, url=url)
