@@ -12,7 +12,7 @@ pip install sharit
 ## Usage
 
 ```bash
-$ sharit --url <url_to_share> --twitter-api-key ... --twitter-api-secret-key ... --sub-reddit ... --reddit-client-id  ... --reddit-secret ... --reddit-refresh-token ... --slack-bot-token= ... --slack-channel "#..."
+$ sharit --url <url_to_share> --twitter-api-key ... --twitter-api-secret-key ... --twitter-access-token ... --twitter-access-token-secret ... --sub-reddit ... --reddit-client-id  ... --reddit-secret ... --reddit-refresh-token ... --slack-bot-token= ... --slack-channel "#..."
 ```
 
 ## Getting the API keys
@@ -67,6 +67,14 @@ $ sharit --url <url_to_share> --twitter-api-key ... --twitter-api-secret-key ...
 Then:
 - Install the newly created bot in the workspace you want to be able to send links to
 - Once done, go to "OAuth & Permissions" and take note of the Bot User OAuth Token
+
+### Twitter
+- Go to https://developer.twitter.com/
+- Create a developer account
+- Make sure that your application has read/write access by going to the app > User authentication settings > User authentication set up Edit. App permissions should be set to Read and write (at least)
+- Edit the default application to get the secrets under "Keys and tokens"
+
+Note that the API key and API key secret correspond to the consumer key and consumer secret).
 
 ## Development
 
