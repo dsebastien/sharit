@@ -12,7 +12,7 @@ pip install sharit
 ## Usage
 
 ```bash
-$ sharit --url <url_to_share> --twitter-api-key ... --twitter-api-secret-key ... --slack-webhook-url ... --sub-reddit ... --reddit-client-id  ... --reddit-secret ... --reddit-refresh-token ...
+$ sharit --url <url_to_share> --twitter-api-key ... --twitter-api-secret-key ... --sub-reddit ... --reddit-client-id  ... --reddit-secret ... --reddit-refresh-token ... --slack-bot-token= ... --slack-channel "#..."
 ```
 
 ## Getting the API keys
@@ -26,6 +26,47 @@ $ sharit --url <url_to_share> --twitter-api-key ... --twitter-api-secret-key ...
   - Set the redirect uri to `http://localhost:8080` (will be used to retrieved the refresh token)
 - Take note of the client id (below "personal use script") and secret
 - Get a refresh token by running: `python ./utils/get-refresh-token.py --reddit-client-id <client id> --reddit-secret <secret>` and save it somewhere safe along with the client id and secret
+
+### Slack
+- Go to https://api.slack.com/apps?new_app=1
+- Create an app using a template and use the following JSON config
+
+```json
+{
+    "display_information": {
+        "name": "Sharit",
+        "description": "Bot that shares links for the community"
+    },
+    "features": {
+        "bot_user": {
+			"display_name": "SharitBot",
+			"always_online": true
+		},
+		"app_home": {
+			"home_tab_enabled": false,
+			"messages_tab_enabled": false
+		}
+    },
+    "oauth_config": {
+		"scopes": {
+			"bot": [
+				"chat:write",
+				"chat:write.public"
+			]
+		}
+	},
+    "settings": {
+        "org_deploy_enabled": false,
+        "socket_mode_enabled": false,
+        "is_hosted": false,
+        "token_rotation_enabled": false
+    }
+}
+```
+
+Then:
+- Install the newly created bot in the workspace you want to be able to send links to
+- Once done, go to "OAuth & Permissions" and take note of the Bot User OAuth Token
 
 ## Development
 

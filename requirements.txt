@@ -1,5 +1,7 @@
 lxml
 praw
 requests
+slack_sdk
 validators
 urllib3
+types-requests

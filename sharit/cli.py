@@ -7,6 +7,8 @@ import sys
 import validators
 import lxml.html
 import urllib.request as urllib
+import slack_sdk as slack
+from slack_sdk.errors import SlackApiError
 
 """CLI interface
 """
@@ -41,7 +43,8 @@ def main():  # pragma: no cover
     parser.add_argument("-rrt","--reddit-refresh-token", required=True, help="The Reddit refresh token")
     parser.add_argument("-tak", "--twitter-api-key", required=True, help="The Twitter API key")
     parser.add_argument("-task", "--twitter-api-secret-key", required=True, help="The Twitter API secret key")
-    parser.add_argument("-swu", "--slack-webhook-url", required=True, help="The Slack Webhook URL")
+    parser.add_argument("-sbt", "--slack-bot-token", required=True, help="The Slack Bot token")
+    parser.add_argument("-sc", "--slack-channel", required=True, help="The Slack channel to share the URL to")
     parser.add_argument("-sr", "--sub-reddit", required=True, help="The sub-reddit to share the URL to")
 
     args = parser.parse_args()
@@ -65,8 +68,11 @@ def main():  # pragma: no cover
     if not args.twitter_api_secret_key:
       sys.exit("Invalid Twitter API secret key")
 
-    if not validators.url(args.slack_webhook_url):
-      sys.exit("Invalid Slack Webhook URL")
+    if not args.slack_bot_token:
+      sys.exit("Invalid Slack Bot token")
+
+    if not args.slack_channel:
+      sys.exit("Invalid Slack channel")
 
     if not args.sub_reddit:
       sys.exit("Invalid Sub-Reddit")
@@ -79,10 +85,12 @@ def main():  # pragma: no cover
     REDDIT_REFRESH_TOKEN = args.reddit_refresh_token
     TWITTER_API_KEY = args.twitter_api_key
     TWITTER_API_SECRET_KEY = args.twitter_api_secret_key
-    SLACK_WEBHOOK_URL = args.slack_webhook_url
+    SLACK_BOT_TOKEN = args.slack_bot_token
+    SLACK_CHANNEL = args.slack_channel
     SUB_REDDIT_NAME = args.sub_reddit
 
-    post_to_reddit(SUB_REDDIT_NAME, url_to_share, REDDIT_CLIENT_ID, REDDIT_SECRET, REDDIT_REFRESH_TOKEN)
+    #post_to_reddit(SUB_REDDIT_NAME, url_to_share, REDDIT_CLIENT_ID, REDDIT_SECRET, REDDIT_REFRESH_TOKEN)
+    post_to_slack(SLACK_CHANNEL, url_to_share, SLACK_BOT_TOKEN)
 
 # Function to publish the URL on Reddit
 def post_to_reddit(sub_reddit, url, reddit_client_id, reddit_secret, reddit_refresh_token):
@@ -102,5 +110,21 @@ def post_to_reddit(sub_reddit, url, reddit_client_id, reddit_secret, reddit_refr
 
   try:
     submission_id = subreddit.submit(title, url=url)
+    print("Shared on Reddit")
   except praw.exceptions.RedditAPIException as e:
-    print(f'Error posting to Reddit: {e}')
+    print(f"Error posting on Reddit: {e}")
+
+# Function to publish the URL on Slack
+def post_to_slack(channel, url, slack_bot_token):
+  print("Sharing [{url}] on slack channel [{channel}]".format(url=url,channel=channel, end=''))
+
+  slack_client = slack.WebClient(token=slack_bot_token)
+
+  try:
+    response = slack_client.chat_postMessage(
+        channel=channel,
+        text=url
+    )
+    print("Shared on Slack")
+  except SlackApiError as e:
+    print(f"Error posting on Slack: {e}")
