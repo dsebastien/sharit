@@ -12,10 +12,8 @@ pip install sharit
 ## Usage
 
 ```bash
-" sharit --url <url_to_share> --twitter-api-key ... --twitter-api-secret-key ... --slack-webhook-url ... --sub-reddit ... --reddit-client-id  ... --reddit-secret ... --reddit-username ... --reddit-password ...
+$ sharit --url <url_to_share> --twitter-api-key ... --twitter-api-secret-key ... --slack-webhook-url ... --sub-reddit ... --reddit-client-id  ... --reddit-secret ... --reddit-refresh-token ...
 ```
-
-Note that if 2FA is enabled on your Reddit account, you have to pass the password with the following form: `--reddit-password <username>:<second factor>`
 
 ## Getting the API keys
 
@@ -25,10 +23,9 @@ Note that if 2FA is enabled on your Reddit account, you have to pass the passwor
   - Set the name you want
   - Select type 'script'
   - Enter a description
-  - Set the redirect uri to `http://localhost:8080` (won't be used anyway)
+  - Set the redirect uri to `http://localhost:8080` (will be used to retrieved the refresh token)
 - Take note of the client id (below "personal use script") and secret
-
-Reference: https://towardsdatascience.com/how-to-use-the-reddit-api-in-python-5e05ddfd1e5c
+- Get a refresh token by running: `python ./utils/get-refresh-token.py --reddit-client-id <client id> --reddit-secret <secret>` and save it somewhere safe along with the client id and secret
 
 ## Development
 

@@ -27,8 +27,6 @@ def main():  # pragma: no cover
     `python -m sharit` and `$ sharit `.
     """
 
-
-
     print("Welcome to {program} {version}".format(program=program_name, version=program_version, end=''))
 
     parser = argparse.ArgumentParser(
@@ -40,8 +38,7 @@ def main():  # pragma: no cover
     parser.add_argument("-u", "--url", required=True, help="The URL to share")
     parser.add_argument("-rcid", "--reddit-client-id", required=True, help="The Reddit Client ID")
     parser.add_argument("-rs", "--reddit-secret", required=True, help="The Reddit secret")
-    parser.add_argument("-ru", "--reddit-username", required=True, help="The Reddit username")
-    parser.add_argument("-rp", "--reddit-password", required=True, help="The Reddit password")
+    parser.add_argument("-rrt","--reddit-refresh-token", required=True, help="The Reddit refresh token")
     parser.add_argument("-tak", "--twitter-api-key", required=True, help="The Twitter API key")
     parser.add_argument("-task", "--twitter-api-secret-key", required=True, help="The Twitter API secret key")
     parser.add_argument("-swu", "--slack-webhook-url", required=True, help="The Slack Webhook URL")
@@ -50,6 +47,7 @@ def main():  # pragma: no cover
     args = parser.parse_args()
 
     if not validators.url(args.url):
+      print("URL: ", args.url)
       sys.exit('Invalid URL')
 
     if not args.reddit_client_id:
@@ -58,11 +56,8 @@ def main():  # pragma: no cover
     if not args.reddit_secret:
       sys.exit("Invalid Reddit secret")
 
-    if not args.reddit_username:
-      sys.exit("Invalid Reddit username")
-
-    if not args.reddit_password:
-              sys.exit("Invalid Reddit password")
+    if not args.reddit_refresh_token:
+      sys.exit("Invalid Reddit refresh token")
 
     if not args.twitter_api_key:
       sys.exit("Invalid Twitter API key")
@@ -81,24 +76,22 @@ def main():  # pragma: no cover
     # Set up credentials for different APIs
     REDDIT_CLIENT_ID = args.reddit_client_id
     REDDIT_SECRET = args.reddit_secret
-    REDDIT_USERNAME = args.reddit_username
-    REDDIT_PASSWORD = args.reddit_password
+    REDDIT_REFRESH_TOKEN = args.reddit_refresh_token
     TWITTER_API_KEY = args.twitter_api_key
     TWITTER_API_SECRET_KEY = args.twitter_api_secret_key
     SLACK_WEBHOOK_URL = args.slack_webhook_url
     SUB_REDDIT_NAME = args.sub_reddit
 
-    post_to_reddit(SUB_REDDIT_NAME, url_to_share, REDDIT_CLIENT_ID, REDDIT_SECRET, REDDIT_USERNAME, REDDIT_PASSWORD)
+    post_to_reddit(SUB_REDDIT_NAME, url_to_share, REDDIT_CLIENT_ID, REDDIT_SECRET, REDDIT_REFRESH_TOKEN)
 
 # Function to publish the URL on Reddit
-def post_to_reddit(sub_reddit, url, reddit_client_id, reddit_secret, reddit_username, reddit_password):
+def post_to_reddit(sub_reddit, url, reddit_client_id, reddit_secret, reddit_refresh_token):
   print("Sharing [{url}] on sub-reddit [{sub_reddit}]".format(url=url,sub_reddit=sub_reddit, end=''))
 
   reddit = praw.Reddit(
     client_id=reddit_client_id,
     client_secret=reddit_secret,
-    username=reddit_username,
-    password=reddit_password,
+    refresh_token=reddit_refresh_token,
     user_agent="{program_name} by u/lechtitseb".format(program_name=program_name, end='')
   )
 
