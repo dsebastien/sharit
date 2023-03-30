@@ -1,2 +1,5 @@
-# You can run `make switch-to-poetry` to use the poetry package manager.
-validators
+lxml=4.9.2
+praw==7.7.0
+requests==2.28.2
+validators==0.20.0
+urllib3=1.26.15

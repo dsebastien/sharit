@@ -12,8 +12,23 @@ pip install sharit
 ## Usage
 
 ```bash
-$ sharit --url=https://google.com --reddit-access-token=foo --twitter-api-key=bar --twitter-api-secret-key=baz --slack-webhook-url=https://foo.bar
+" sharit --url <url_to_share> --twitter-api-key ... --twitter-api-secret-key ... --slack-webhook-url ... --sub-reddit ... --reddit-client-id  ... --reddit-secret ... --reddit-username ... --reddit-password ...
 ```
+
+Note that if 2FA is enabled on your Reddit account, you have to pass the password with the following form: `--reddit-password <username>:<second factor>`
+
+## Getting the API keys
+
+### Reddit
+- Go to https://www.reddit.com/prefs/apps
+- Create an application
+  - Set the name you want
+  - Select type 'script'
+  - Enter a description
+  - Set the redirect uri to `http://localhost:8080` (won't be used anyway)
+- Take note of the client id (below "personal use script") and secret
+
+Reference: https://towardsdatascience.com/how-to-use-the-reddit-api-in-python-5e05ddfd1e5c
 
 ## Development
 

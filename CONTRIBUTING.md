@@ -111,3 +111,6 @@ To trigger a new release all you need to do is.
 the `make release` will ask you the version number to create the tag, ex: type `0.1.1` when you are asked.
 
 > **CAUTION**:  The make release will change local changelog files and commit all the unstaged changes you have.
+
+## API keys
+Check out the main readme file to see how to get the API keys you need
