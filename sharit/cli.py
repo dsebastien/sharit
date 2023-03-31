@@ -1,8 +1,9 @@
 import argparse
+import sys
+
 import praw
 import requests
 import slack_sdk as slack
-import sys
 import tweepy
 import validators
 from bs4 import BeautifulSoup
@@ -39,13 +40,19 @@ def main():  # pragma: no cover
 
     parser.add_argument("-u", "--url", required=True, help="The URL to share")
     parser.add_argument(
-        "-rcid", "--reddit-client-id", required=True, help="The Reddit Client ID"
+        "-rcid",
+        "--reddit-client-id",
+        required=True,
+        help="The Reddit Client ID",
     )
     parser.add_argument(
         "-rs", "--reddit-secret", required=True, help="The Reddit secret"
     )
     parser.add_argument(
-        "-rrt", "--reddit-refresh-token", required=True, help="The Reddit refresh token"
+        "-rrt",
+        "--reddit-refresh-token",
+        required=True,
+        help="The Reddit refresh token",
     )
     parser.add_argument(
         "-tak", "--twitter-api-key", required=True, help="The Twitter API key"
@@ -57,7 +64,10 @@ def main():  # pragma: no cover
         help="The Twitter API secret key",
     )
     parser.add_argument(
-        "-tat", "--twitter-access-token", required=True, help="The Twitter Access token"
+        "-tat",
+        "--twitter-access-token",
+        required=True,
+        help="The Twitter Access token",
     )
     parser.add_argument(
         "-tats",
@@ -75,7 +85,10 @@ def main():  # pragma: no cover
         help="The Slack channel to share the URL to",
     )
     parser.add_argument(
-        "-sr", "--sub-reddit", required=True, help="The sub-reddit to share the URL to"
+        "-sr",
+        "--sub-reddit",
+        required=True,
+        help="The sub-reddit to share the URL to",
     )
 
     args = parser.parse_args()
